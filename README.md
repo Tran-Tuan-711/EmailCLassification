@@ -78,7 +78,7 @@ python test_predict.py
 
 ## 🛠 Công nghệ
 
-- **Python 3.x**
+- **Python 3.11.x**
 - **TensorFlow/Keras** — Mô hình CNN
 - **NLTK** — Tiền xử lý ngôn ngữ tự nhiên
 - **scikit-learn** — Đánh giá model

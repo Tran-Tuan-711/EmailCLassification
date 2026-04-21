@@ -1,0 +1,59 @@
+2026-04-21 22:01:27,162 - INFO - Loading cleaned dataset...
+2026-04-21 22:02:10,599 - INFO - Loading cleaned dataset...
+2026-04-21 22:02:10,896 - INFO - Dataset size: 5348
+2026-04-21 22:02:10,901 - INFO - Label distribution:
+label
+0    3648
+1    1700
+2026-04-21 22:02:12,302 - INFO - Train size: 4278, Test size: 1070
+2026-04-21 22:02:12,600 - INFO - Start training...
+2026-04-21 22:02:47,318 - INFO - 
+=== CLASSIFICATION REPORT ===
+2026-04-21 22:02:47,325 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       0.99      0.99      0.99       741
+        Spam       0.99      0.98      0.98       329
+
+    accuracy                           0.99      1070
+   macro avg       0.99      0.99      0.99      1070
+weighted avg       0.99      0.99      0.99      1070
+
+2026-04-21 22:02:47,325 - INFO - 
+=== CONFUSION MATRIX ===
+2026-04-21 22:02:47,329 - INFO - 
+[[737   4]
+ [  7 322]]
+2026-04-21 22:02:47,393 - INFO - Model saved to model/cnn_model.h5
+2026-04-21 22:02:47,514 - INFO - Tokenizer saved to model/tokenizer.pkl
+2026-04-21 22:02:47,805 - INFO - Training charts saved to logs/charts/training_history.png
+2026-04-21 22:02:47,806 - INFO - Training complete!
+2026-04-21 22:27:48,195 - INFO - Loading cleaned dataset...
+2026-04-21 22:27:48,517 - INFO - Dataset size: 5348
+2026-04-21 22:27:48,523 - INFO - Label distribution:
+label
+0    3648
+1    1700
+2026-04-21 22:27:51,083 - INFO - Train size: 4278, Test size: 1070
+2026-04-21 22:27:51,428 - INFO - Start training...
+2026-04-21 22:28:44,415 - INFO - 
+=== CLASSIFICATION REPORT ===
+2026-04-21 22:28:44,427 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       0.99      0.99      0.99       741
+        Spam       0.98      0.99      0.98       329
+
+    accuracy                           0.99      1070
+   macro avg       0.99      0.99      0.99      1070
+weighted avg       0.99      0.99      0.99      1070
+
+2026-04-21 22:28:44,428 - INFO - 
+=== CONFUSION MATRIX ===
+2026-04-21 22:28:44,432 - INFO - 
+[[735   6]
+ [  4 325]]
+2026-04-21 22:28:44,502 - INFO - Model saved to model/cnn_model.h5
+2026-04-21 22:28:44,618 - INFO - Tokenizer saved to model/tokenizer.pkl
+2026-04-21 22:28:44,900 - INFO - Training charts saved to logs/charts/training_history.png
+2026-04-21 22:28:44,900 - INFO - Training complete!
