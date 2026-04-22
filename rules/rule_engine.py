@@ -229,44 +229,6 @@ class PhishingRuleEngine:
         )
         return result
 
-    def get_report(self, subject="", body="", sender_email="", sender_name=""):
-        """
-        Tạo báo cáo chi tiết phân tích email (dùng cho debug/display).
-        """
-        result = self.classify(subject, body, sender_email, sender_name)
-        domain = self._extract_domain(sender_email)
-
-        lines = [
-            "=" * 50,
-            "  PHISHING RULE ENGINE — ANALYSIS REPORT",
-            "=" * 50,
-            f"  Sender:  {sender_name} <{sender_email}>",
-            f"  Domain:  {domain}",
-            f"  Subject: {subject[:80]}{'...' if len(subject) > 80 else ''}",
-            "-" * 50,
-            f"  Spam Score:  {result['spam_score']:.1f} / {self.spam_threshold} (threshold)",
-            f"  Label:       {result['label'] or 'UNDECIDED (need model)'}",
-            f"  Method:      {result['method'] or 'N/A'}",
-            f"  Confidence:  {result['confidence']:.1%}",
-            "-" * 50,
-        ]
-
-        if result["matched_rules"]:
-            lines.append("  Matched Rules:")
-            for rule in result["matched_rules"]:
-                lines.append(f"    [{rule['group_name']}] "
-                             f"(weight={rule['weight']}, score={rule['group_score']:.1f})")
-                for kw in rule["matched_keywords"][:5]:
-                    lines.append(f"      → {kw}")
-                if len(rule["matched_keywords"]) > 5:
-                    lines.append(f"      → ...và {len(rule['matched_keywords']) - 5} keyword khác")
-        else:
-            lines.append("  Matched Rules: None")
-
-        lines.append("=" * 50)
-        return "\n".join(lines)
-
-
 # Singleton instance cho sử dụng nhanh
 _engine = None
 
