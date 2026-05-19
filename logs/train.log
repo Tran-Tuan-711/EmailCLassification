@@ -57,3 +57,32 @@ weighted avg       0.99      0.99      0.99      1070
 2026-04-21 22:28:44,618 - INFO - Tokenizer saved to model/tokenizer.pkl
 2026-04-21 22:28:44,900 - INFO - Training charts saved to logs/charts/training_history.png
 2026-04-21 22:28:44,900 - INFO - Training complete!
+2026-04-22 13:43:49,500 - INFO - Loading cleaned dataset...
+2026-04-22 13:43:49,983 - INFO - Dataset size: 5348
+2026-04-22 13:43:49,988 - INFO - Label distribution:
+label
+0    3648
+1    1700
+2026-04-22 13:43:51,848 - INFO - Train size: 4278, Test size: 1070
+2026-04-22 13:43:52,551 - INFO - Start training...
+2026-04-22 13:44:31,601 - INFO - 
+=== CLASSIFICATION REPORT ===
+2026-04-22 13:44:31,613 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       0.99      0.99      0.99       741
+        Spam       0.98      0.98      0.98       329
+
+    accuracy                           0.99      1070
+   macro avg       0.99      0.99      0.99      1070
+weighted avg       0.99      0.99      0.99      1070
+
+2026-04-22 13:44:31,613 - INFO - 
+=== CONFUSION MATRIX ===
+2026-04-22 13:44:31,617 - INFO - 
+[[735   6]
+ [  7 322]]
+2026-04-22 13:44:31,802 - INFO - Model saved to model/cnn_model.h5
+2026-04-22 13:44:31,977 - INFO - Tokenizer saved to model/tokenizer.pkl
+2026-04-22 13:44:33,124 - INFO - Training charts saved to logs/charts/training_history.png
+2026-04-22 13:44:33,124 - INFO - Training complete!

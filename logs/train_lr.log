@@ -1,0 +1,42 @@
+2026-05-19 20:02:35,392 - INFO - ============================================================
+2026-05-19 20:02:35,395 - INFO - LOGISTIC REGRESSION — TRAINING
+2026-05-19 20:02:35,398 - INFO - ============================================================
+2026-05-19 20:02:35,401 - INFO - Loading dataset from data/spam_clean_merged.csv...
+2026-05-19 20:02:36,186 - INFO - Dataset size: 5348
+2026-05-19 20:02:36,193 - INFO - Label distribution:
+label
+0    3648
+1    1700
+2026-05-19 20:02:36,193 - INFO - Applying TF-IDF Vectorization (max_features=10000)...
+2026-05-19 20:02:41,322 - INFO - TF-IDF matrix shape: (5348, 10000)
+2026-05-19 20:02:41,334 - INFO - Train size: 4278, Test size: 1070
+2026-05-19 20:02:41,334 - INFO - Training Logistic Regression...
+2026-05-19 20:02:41,506 - INFO - Training completed!
+2026-05-19 20:02:41,512 - INFO - 
+========================================
+2026-05-19 20:02:41,512 - INFO - CLASSIFICATION REPORT
+2026-05-19 20:02:41,512 - INFO - ========================================
+2026-05-19 20:02:41,518 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       0.99      0.99      0.99       730
+        Spam       0.98      0.99      0.98       340
+
+    accuracy                           0.99      1070
+   macro avg       0.98      0.99      0.99      1070
+weighted avg       0.99      0.99      0.99      1070
+
+2026-05-19 20:02:41,520 - INFO - Accuracy: 0.9879
+2026-05-19 20:02:41,520 - INFO - ROC-AUC:  0.9994
+2026-05-19 20:02:41,520 - INFO - 
+CONFUSION MATRIX:
+2026-05-19 20:02:41,523 - INFO - 
+[[722   8]
+ [  5 335]]
+2026-05-19 20:02:41,525 - INFO - Model saved to model/lr_model.pkl
+2026-05-19 20:02:41,555 - INFO - Vectorizer saved to model/tfidf_vectorizer.pkl
+2026-05-19 20:02:42,293 - INFO - Charts saved to logs/charts/lr_training.png
+2026-05-19 20:02:42,295 - INFO - 
+============================================================
+2026-05-19 20:02:42,295 - INFO - LOGISTIC REGRESSION TRAINING COMPLETE!
+2026-05-19 20:02:42,295 - INFO - ============================================================
