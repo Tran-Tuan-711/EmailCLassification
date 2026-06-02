@@ -1,4 +1,4 @@
-﻿import pandas as pd
+import pandas as pd
 import re
 from utils.preprocess import clean_text
 
@@ -157,70 +157,4 @@ def _looks_like_raw_email(text):
     header_count = sum(1 for h in headers if h in text[:500])
     return header_count >= 2
 
-
-def load_and_clean_vn(path):
-    """
-    Load và clean dataset tiếng Việt.
-    Dataset VN dùng encoding utf-8, text đã sạch (không có header email).
-    """
-    df = pd.read_csv(path, encoding='utf-8')
-    print(f"\n[VN Dataset] Raw: {len(df)} rows, columns: {list(df.columns)}")
-
-    # Chuẩn hóa cột
-    if 'label' not in df.columns and 'target' in df.columns:
-        df = df.rename(columns={'target': 'label'})
-
-    df = df[['text', 'label']]
-    df = df.dropna()
-    df = df.drop_duplicates(subset=['text'])
-
-    # Chuyển label text sang số nếu cần
-    if df['label'].dtype == 'object':
-        label_map = {'ham': 0, 'spam': 1, 'normal': 0}
-        df['label'] = df['label'].str.lower().map(label_map)
-        df = df.dropna(subset=['label'])
-        df['label'] = df['label'].astype(int)
-
-    print("Applying Vietnamese text preprocessing...")
-    df['clean_text'] = df['text'].apply(clean_text)
-
-    # Loại bỏ text quá ngắn
-    df = df[df['clean_text'].str.len() > 5]
-
-    print(f"[VN Dataset] After clean: {len(df)}")
-    print(f"Label distribution:\n{df['label'].value_counts().to_string()}")
-
-    return df
-
-
-def merge_datasets(df_en, df_vn):
-    """
-    Merge dataset English + Vietnamese.
-    Cân bằng lại nếu cần để tránh mất cân bằng quá nhiều.
-    """
-    print(f"\n{'='*50}")
-    print("MERGING DATASETS")
-    print(f"{'='*50}")
-    print(f"English dataset: {len(df_en)} rows")
-    print(f"Vietnamese dataset: {len(df_vn)} rows")
-
-    # Thêm cột source để track nguồn
-    df_en = df_en.copy()
-    df_vn = df_vn.copy()
-    df_en['source'] = 'spam_assassin'
-    df_vn['source'] = 'dataset_vn'
-
-    # Merge
-    df_merged = pd.concat([df_en, df_vn], ignore_index=True)
-
-    # Shuffle
-    df_merged = df_merged.sample(frac=1, random_state=42).reset_index(drop=True)
-
-    print(f"\nMerged dataset: {len(df_merged)} rows")
-    print(f"Label distribution:")
-    print(f"  Normal (0): {len(df_merged[df_merged['label'] == 0])}")
-    print(f"  Spam   (1): {len(df_merged[df_merged['label'] == 1])}")
-    print(f"\nSource distribution:")
-    print(df_merged['source'].value_counts().to_string())
-
-    return df_merged
+

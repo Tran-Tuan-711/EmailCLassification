@@ -28,7 +28,7 @@ TOKENIZER_PATH = "model/tokenizer.pkl"
 
 def train():
     logger.info("Loading cleaned dataset...")
-    df = pd.read_csv("data/spam_clean_merged.csv")
+    df = pd.read_csv("data/spam_clean.csv")
 
     texts = df['clean_text']
     labels = df['label']  # 0 = Normal (ham), 1 = Spam

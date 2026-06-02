@@ -1,1 +1,19 @@
-.vs/ 
+# IDE / Editor
+.vs/
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# TensorBoard logs (large files)
+logs/fit/
+
+# Virtual environment
+venv/
+.env/

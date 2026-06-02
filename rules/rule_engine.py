@@ -9,7 +9,7 @@ Quy trình kiểm tra:
   5. Nếu spam_score > threshold → Spam (rule-based)
   6. Nếu không đủ evidence → fallback sang model prediction
 
-Kết hợp với model CNN/LR/BERT: Rule check trước, model sau.
+Kết hợp với model CNN/LR: Rule check trước, model sau.
 """
 
 import re
@@ -161,26 +161,22 @@ class PhishingRuleEngine:
             "details": "",
         }
 
-        # ─── STEP 1: Whitelist check ───────────────────────────────────
-        if self._check_trusted_domain(domain):
+        # ─── STEP 1: Trusted sender pattern check (email dịch vụ chính thức) ──
+        # Chỉ áp dụng cho email từ dịch vụ cụ thể (noreply@github.com, *@*.google.com...)
+        if self._check_trusted_sender(sender_email):
             result["label"] = "Normal"
             result["confidence"] = 0.95
             result["method"] = "rule_whitelist"
-            result["details"] = f"Domain '{domain}' nằm trong whitelist đáng tin cậy."
+            result["details"] = f"Sender '{sender_email}' khớp pattern email dịch vụ chính thức."
             return result
 
-        if self._check_trusted_sender(sender_email):
-            result["label"] = "Normal"
-            result["confidence"] = 0.90
-            result["method"] = "rule_whitelist"
-            result["details"] = f"Sender '{sender_email}' khớp pattern email đáng tin cậy."
-            return result
-
-        # ─── STEP 2: Suspicious domain check ──────────────────────────
+        # ─── STEP 2: Thu thập tất cả spam signals ─────────────────────────
         spam_score = 0.0
+        is_trusted_domain = self._check_trusted_domain(domain)
 
+        # 2a. Suspicious domain check
         if self._check_suspicious_domain(domain):
-            spam_score += 3.0  # Domain nghi ngờ → score cao
+            spam_score += 3.0
             result["matched_rules"].append({
                 "group_id": "suspicious_domain",
                 "group_name": "Domain đáng ngờ",
@@ -189,12 +185,12 @@ class PhishingRuleEngine:
                 "group_score": 3.0,
             })
 
-        # ─── STEP 3: Keyword matching ─────────────────────────────────
+        # 2b. Keyword matching
         matched_groups, keyword_score = self._match_keywords(full_text)
         spam_score += keyword_score
         result["matched_rules"].extend(matched_groups)
 
-        # ─── STEP 4: Suspicious sender check ──────────────────────────
+        # 2c. Suspicious sender check
         if self._check_suspicious_sender(sender_email):
             spam_score += 1.5
             result["matched_rules"].append({
@@ -207,22 +203,33 @@ class PhishingRuleEngine:
 
         result["spam_score"] = spam_score
 
-        # ─── STEP 5: Quyết định dựa trên score ───────────────────────
+        # ─── STEP 3: Spam score >= threshold → Spam (KỂ CẢ trusted domain) ──
         if spam_score >= self.spam_threshold:
             result["label"] = "Spam"
             result["confidence"] = min(0.99, 0.7 + spam_score * 0.05)
             result["method"] = "rule_keyword"
 
-            # Tạo details
             group_names = [g["group_name"] for g in result["matched_rules"]]
+            extra = " (⚠ trusted domain nhưng nội dung đáng ngờ)" if is_trusted_domain else ""
             result["details"] = (
                 f"Spam score: {spam_score:.1f} (threshold: {self.spam_threshold}). "
-                f"Nhóm vi phạm: {', '.join(group_names)}"
+                f"Nhóm vi phạm: {', '.join(group_names)}{extra}"
             )
             return result
 
-        # ─── STEP 6: Không đủ evidence → fallback sang model ─────────
-        result["label"] = None  # Model sẽ quyết định
+        # ─── STEP 4: Trusted domain + không có tín hiệu ngờ → Normal ─────
+        if is_trusted_domain and spam_score == 0:
+            result["label"] = "Normal"
+            result["confidence"] = 0.90
+            result["method"] = "rule_whitelist"
+            result["details"] = (
+                f"Domain '{domain}' nằm trong whitelist đáng tin cậy "
+                f"và không phát hiện tín hiệu spam."
+            )
+            return result
+
+        # ─── STEP 5: Không đủ evidence → fallback sang model ─────────────
+        result["label"] = None
         result["details"] = (
             f"Spam score: {spam_score:.1f} (dưới threshold {self.spam_threshold}). "
             f"Cần model AI để phân loại."

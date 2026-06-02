@@ -34,13 +34,12 @@ from utils.logger import setup_logger
 logger = setup_logger(log_file="logs/train_lr.log")
 
 # Paths
-DATA_PATH = "data/spam_clean_merged.csv"
+DATA_PATH = "data/spam_clean.csv"
 MODEL_PATH = "model/lr_model.pkl"
 VECTORIZER_PATH = "model/tfidf_vectorizer.pkl"
 
 
 def train():
-    """Train Logistic Regression model."""
 
     # =====================
     # 1. Load dataset

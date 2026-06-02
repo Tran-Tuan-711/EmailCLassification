@@ -166,13 +166,13 @@ SPAM_KEYWORD_GROUPS = {
 # Các email từ domain này sẽ tự động được coi là Normal
 # ==============================================================================
 TRUSTED_DOMAINS = [
-    # Google services
-    "google.com", "gmail.com", "classroom.google.com",
+    # Google services (chỉ domain dịch vụ, KHÔNG gồm gmail.com)
+    "google.com", "classroom.google.com",
     "googlemail.com", "youtube.com", "accounts.google.com",
 
-    # Microsoft
-    "microsoft.com", "outlook.com", "hotmail.com",
-    "live.com", "office365.com", "teams.microsoft.com",
+    # Microsoft (chỉ domain dịch vụ, KHÔNG gồm outlook.com/hotmail.com/live.com)
+    "microsoft.com",
+    "office365.com", "teams.microsoft.com",
 
     # Development / Tech
     "github.com", "gitlab.com", "bitbucket.org",
@@ -185,8 +185,8 @@ TRUSTED_DOMAINS = [
     "twitter.com", "x.com", "linkedin.com", "tiktok.com",
     "discord.com", "discordapp.com", "telegram.org",
 
-    # Apple
-    "apple.com", "icloud.com",
+    # Apple (chỉ domain dịch vụ, KHÔNG gồm icloud.com)
+    "apple.com",
 
     # E-commerce VN (chính thức)
     "shopee.vn", "shopee.com", "tiki.vn",

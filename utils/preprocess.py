@@ -1,4 +1,4 @@
-﻿import re
+import re
 import unicodedata
 import nltk
 from nltk.corpus import stopwords

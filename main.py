@@ -1,10 +1,15 @@
+"""
+Entry point — Chạy GUI Email Spam Classifier.
+Usage: python main.py
+"""
+
 import sys
 import os
 
-# Chạy GUI từ thư mục gốc
+# Đảm bảo import path đúng
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# from GUI.app import main
-from test import run_test
+from GUI.app import main
+
 if __name__ == "__main__":
-    run_test()
+    main()
