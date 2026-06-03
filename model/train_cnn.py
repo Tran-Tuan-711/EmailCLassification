@@ -72,9 +72,6 @@ def train():
 
     early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
 
-    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-    tensorboard = TensorBoard(log_dir=log_dir)
-
     logger.info("Start training...")
 
     history = model.fit(
@@ -82,7 +79,7 @@ def train():
         epochs=10,
         batch_size=32,
         validation_split=0.2,
-        callbacks=[early_stop, tensorboard]
+        callbacks=[early_stop]
     )
 
     # =====================

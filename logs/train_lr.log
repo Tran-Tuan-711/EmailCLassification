@@ -82,3 +82,45 @@ CONFUSION MATRIX:
 ============================================================
 2026-05-27 14:29:44,425 - INFO - LOGISTIC REGRESSION TRAINING COMPLETE!
 2026-05-27 14:29:44,426 - INFO - ============================================================
+2026-06-03 13:29:36,474 - INFO - ============================================================
+2026-06-03 13:29:36,474 - INFO - LOGISTIC REGRESSION — TRAINING
+2026-06-03 13:29:36,474 - INFO - ============================================================
+2026-06-03 13:29:36,474 - INFO - Loading dataset from data/spam_clean.csv...
+2026-06-03 13:29:36,671 - INFO - Dataset size: 5329
+2026-06-03 13:29:36,672 - INFO - Label distribution:
+label
+0    3638
+1    1691
+2026-06-03 13:29:36,672 - INFO - Applying TF-IDF Vectorization (max_features=10000)...
+2026-06-03 13:29:38,969 - INFO - TF-IDF matrix shape: (5329, 10000)
+2026-06-03 13:29:38,976 - INFO - Train size: 4263, Test size: 1066
+2026-06-03 13:29:38,977 - INFO - Training Logistic Regression...
+2026-06-03 13:29:39,043 - INFO - Training completed!
+2026-06-03 13:29:39,047 - INFO - 
+========================================
+2026-06-03 13:29:39,047 - INFO - CLASSIFICATION REPORT
+2026-06-03 13:29:39,047 - INFO - ========================================
+2026-06-03 13:29:39,051 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       0.99      1.00      0.99       728
+        Spam       1.00      0.98      0.99       338
+
+    accuracy                           0.99      1066
+   macro avg       0.99      0.99      0.99      1066
+weighted avg       0.99      0.99      0.99      1066
+
+2026-06-03 13:29:39,051 - INFO - Accuracy: 0.9925
+2026-06-03 13:29:39,051 - INFO - ROC-AUC:  0.9994
+2026-06-03 13:29:39,051 - INFO - 
+CONFUSION MATRIX:
+2026-06-03 13:29:39,052 - INFO - 
+[[727   1]
+ [  7 331]]
+2026-06-03 13:29:39,052 - INFO - Model saved to model/lr_model.pkl
+2026-06-03 13:29:39,067 - INFO - Vectorizer saved to model/tfidf_vectorizer.pkl
+2026-06-03 13:29:39,325 - INFO - Charts saved to logs/charts/lr_training.png
+2026-06-03 13:29:39,325 - INFO - 
+============================================================
+2026-06-03 13:29:39,325 - INFO - LOGISTIC REGRESSION TRAINING COMPLETE!
+2026-06-03 13:29:39,325 - INFO - ============================================================
