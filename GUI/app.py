@@ -22,31 +22,31 @@ from email_reader.imap_reader import IMAPEmailReader, detect_imap_server
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# COLOR PALETTE — Dark Theme
+# COLOR PALETTE — Premium Light Theme
 # ═══════════════════════════════════════════════════════════════════════════
 
 COLORS = {
-    "bg_dark": "#0f0f1a",
-    "bg_card": "#1a1a2e",
-    "bg_input": "#16213e",
-    "bg_input_focus": "#1a2744",
-    "accent": "#00d4aa",
-    "accent_hover": "#00f5c4",
-    "accent_dim": "#007a63",
-    "danger": "#ff4757",
-    "danger_hover": "#ff6b7a",
-    "warning": "#ffa502",
-    "success": "#2ed573",
-    "text_primary": "#e8e8f0",
-    "text_secondary": "#8888aa",
-    "text_muted": "#555577",
-    "border": "#2a2a4a",
-    "border_focus": "#00d4aa",
-    "scrollbar": "#333355",
-    "tag_spam_bg": "#3d1515",
-    "tag_spam_fg": "#ff4757",
-    "tag_normal_bg": "#153d2b",
-    "tag_normal_fg": "#2ed573",
+    "bg_dark": "#f1f5f9",         # Nền ứng dụng chính (Slate 100)
+    "bg_card": "#ffffff",          # Nền của các thẻ (Card) chứa nội dung
+    "bg_input": "#ffffff",         # Nền của các ô nhập liệu
+    "bg_input_focus": "#f8fafc",
+    "accent": "#0f172a",           # Màu đen Slate 900 (Premium/Corporate)
+    "accent_hover": "#334155",     # Slate 700 khi di chuột qua
+    "accent_dim": "#f1f5f9",       # Nền xám Slate 100 khi chọn dòng
+    "danger": "#991b1b",           # Màu đỏ trầm (Muted Red) cho Spam
+    "danger_hover": "#7f1d1d",
+    "warning": "#d97706",          # Màu Amber/Vàng hổ phách khi đang tải
+    "success": "#166534",          # Màu xanh trầm (Muted Green) cho Normal
+    "text_primary": "#0f172a",     # Chữ chính màu Slate 900
+    "text_secondary": "#475569",   # Chữ phụ màu Slate 600
+    "text_muted": "#94a3b8",       # Chữ mờ màu Slate 400
+    "border": "#cbd5e1",           # Đường viền Slate 300
+    "border_focus": "#475569",     # Đường viền khi click vào input
+    "scrollbar": "#cbd5e1",        # Màu scrollbar
+    "tag_spam_bg": "#fee2e2",      # Nhãn Spam nền hồng nhạt
+    "tag_spam_fg": "#991b1b",      # Nhãn Spam chữ đỏ trầm
+    "tag_normal_bg": "#dcfce7",    # Nhãn Normal nền xanh nhạt
+    "tag_normal_fg": "#166534",    # Nhãn Normal chữ xanh trầm
 }
 
 
@@ -70,7 +70,7 @@ class EmailClassifierApp:
     # ─── Style Configuration ─────────────────────────────────────────────
 
     def _setup_styles(self):
-        """Configure ttk styles for dark theme."""
+        """Configure ttk styles for light theme."""
         style = ttk.Style()
         style.theme_use("clam")
 
@@ -79,25 +79,37 @@ class EmailClassifierApp:
         style.configure("TNotebook.Tab",
                         background=COLORS["bg_card"],
                         foreground=COLORS["text_secondary"],
-                        padding=[20, 10],
-                        font=("Segoe UI", 11))
+                        padding=[20, 8],
+                        font=("Segoe UI", 10, "bold"),
+                        borderwidth=1,
+                        bordercolor=COLORS["border"])
         style.map("TNotebook.Tab",
-                  background=[("selected", COLORS["bg_dark"])],
-                  foreground=[("selected", COLORS["accent"])])
+                  background=[("selected", COLORS["accent"]), ("active", COLORS["accent_dim"])],
+                  foreground=[("selected", "#ffffff"), ("active", COLORS["accent"])])
 
         # Frame
         style.configure("Dark.TFrame", background=COLORS["bg_dark"])
         style.configure("Card.TFrame", background=COLORS["bg_card"])
 
+        # Combobox
+        style.configure("TCombobox",
+                        background=COLORS["bg_card"],
+                        foreground=COLORS["text_primary"],
+                        bordercolor=COLORS["border"],
+                        darkcolor=COLORS["border"],
+                        lightcolor=COLORS["border"],
+                        arrowcolor=COLORS["accent"],
+                        font=("Segoe UI", 10))
+
         # Label
         style.configure("Title.TLabel",
                         background=COLORS["bg_dark"],
                         foreground=COLORS["text_primary"],
-                        font=("Segoe UI", 22, "bold"))
+                        font=("Segoe UI", 20, "bold"))
         style.configure("Subtitle.TLabel",
                         background=COLORS["bg_dark"],
                         foreground=COLORS["text_secondary"],
-                        font=("Segoe UI", 10))
+                        font=("Segoe UI", 10, "italic"))
         style.configure("Dark.TLabel",
                         background=COLORS["bg_dark"],
                         foreground=COLORS["text_primary"],
@@ -109,17 +121,19 @@ class EmailClassifierApp:
         style.configure("Accent.TLabel",
                         background=COLORS["bg_dark"],
                         foreground=COLORS["accent"],
-                        font=("Segoe UI", 10))
+                        font=("Segoe UI", 10, "bold"))
 
         # Button
         style.configure("Accent.TButton",
                         background=COLORS["accent"],
-                        foreground="#000000",
+                        foreground="#ffffff",
                         font=("Segoe UI", 11, "bold"),
                         padding=[20, 10])
         style.map("Accent.TButton",
                   background=[("active", COLORS["accent_hover"]),
-                              ("disabled", COLORS["text_muted"])])
+                              ("disabled", COLORS["text_muted"])],
+                  foreground=[("active", "#ffffff"),
+                              ("disabled", "#ffffff")])
 
         style.configure("Danger.TButton",
                         background=COLORS["danger"],
@@ -140,14 +154,14 @@ class EmailClassifierApp:
         header = ttk.Frame(self.root, style="Dark.TFrame")
         header.pack(fill="x", padx=30, pady=(20, 5))
 
-        ttk.Label(header, text="Email Spam Classifier",
+        ttk.Label(header, text="Email Filter Pro",
                   style="Title.TLabel").pack(side="left")
-        ttk.Label(header, text="CNN Model + Rule Engine VN",
-                  style="Subtitle.TLabel").pack(side="right", pady=(10, 0))
+        ttk.Label(header, text="Hệ thống lọc và phân loại thư rác",
+                  style="Subtitle.TLabel").pack(side="right", pady=(12, 0))
 
         # Separator
         ttk.Separator(self.root, orient="horizontal",
-                       style="Dark.TSeparator").pack(fill="x", padx=30, pady=(5, 10))
+                       style="Dark.TSeparator").pack(fill="x", padx=30, pady=(5, 15))
 
         # Notebook (Tabs)
         self.notebook = ttk.Notebook(self.root)
@@ -160,14 +174,21 @@ class EmailClassifierApp:
 
     def _build_classify_tab(self):
         tab = ttk.Frame(self.notebook, style="Dark.TFrame")
-        self.notebook.add(tab, text="  Phan loai Email  ")
+        self.notebook.add(tab, text="  Phân loại thủ công  ")
 
-        # Left panel — Input
-        left = ttk.Frame(tab, style="Dark.TFrame")
-        left.pack(side="left", fill="both", expand=True, padx=(15, 5), pady=15)
+        # Create a PanedWindow to allow dragging/resizing the panels
+        paned = ttk.Panedwindow(tab, orient=tk.HORIZONTAL)
+        paned.pack(fill="both", expand=True, padx=15, pady=15)
+
+        # Left panel — Input container
+        left_container = ttk.Frame(paned, style="Dark.TFrame")
+        paned.add(left_container, weight=1)
+
+        left = ttk.Frame(left_container, style="Dark.TFrame")
+        left.pack(fill="both", expand=True, padx=(0, 10))
 
         # Sender email input
-        ttk.Label(left, text="Email nguoi gui (khong bat buoc)",
+        ttk.Label(left, text="Email người gửi (tùy chọn)",
                   style="Dark.TLabel").pack(anchor="w", pady=(0, 5))
 
         self.sender_input = tk.Entry(left,
@@ -185,8 +206,18 @@ class EmailClassifierApp:
         self.sender_input.bind("<FocusIn>", lambda e: self._on_focus_in(self.sender_input, "vi du: sender@gmail.com"))
         self.sender_input.bind("<FocusOut>", lambda e: self._on_focus_out(self.sender_input, "vi du: sender@gmail.com"))
 
+        # Chọn thuật toán phân loại (Dropdown / Combobox)
+        model_frame = ttk.Frame(left, style="Dark.TFrame")
+        model_frame.pack(fill="x", pady=(0, 15))
+
+        ttk.Label(model_frame, text="Thuật toán:", style="Dark.TLabel").pack(side="left", padx=(0, 10))
+
+        self.model_combo = ttk.Combobox(model_frame, values=["CNN (Deep Learning)", "Logistic Regression (LR)"], state="readonly", font=("Segoe UI", 10))
+        self.model_combo.set("CNN (Deep Learning)")
+        self.model_combo.pack(side="left", fill="x", expand=True)
+
         # Email content input
-        ttk.Label(left, text="Noi dung Email (Subject + Body)",
+        ttk.Label(left, text="Nội dung Email (Tiêu đề + Thân bài)",
                   style="Dark.TLabel").pack(anchor="w", pady=(0, 5))
 
         self.email_input = scrolledtext.ScrolledText(
@@ -201,6 +232,7 @@ class EmailClassifierApp:
             highlightcolor=COLORS["border_focus"],
             highlightbackground=COLORS["border"],
             height=12,
+            width=40,
         )
         self.email_input.pack(fill="both", expand=True, pady=(0, 15))
 
@@ -208,19 +240,22 @@ class EmailClassifierApp:
         btn_frame = ttk.Frame(left, style="Dark.TFrame")
         btn_frame.pack(fill="x")
 
-        ttk.Button(btn_frame, text="Phan loai",
+        ttk.Button(btn_frame, text="Phân tích email",
                    style="Accent.TButton",
                    command=self._on_classify).pack(side="left", fill="x", expand=True, padx=(0, 5))
 
-        ttk.Button(btn_frame, text="Xoa",
+        ttk.Button(btn_frame, text="Xóa sạch",
                    style="Danger.TButton",
                    command=self._on_clear).pack(side="right")
 
-        # Right panel — Result
-        right = ttk.Frame(tab, style="Dark.TFrame")
-        right.pack(side="right", fill="both", expand=True, padx=(5, 15), pady=15)
+        # Right panel — Result container
+        right_container = ttk.Frame(paned, style="Dark.TFrame")
+        paned.add(right_container, weight=1)
 
-        ttk.Label(right, text="Ket qua phan loai",
+        right = ttk.Frame(right_container, style="Dark.TFrame")
+        right.pack(fill="both", expand=True, padx=(10, 0))
+
+        ttk.Label(right, text="Kết quả phân tích",
                   style="Dark.TLabel").pack(anchor="w", pady=(0, 10))
 
         # Result card
@@ -229,29 +264,30 @@ class EmailClassifierApp:
                                      highlightbackground=COLORS["border"])
         self.result_frame.pack(fill="both", expand=True)
 
-        # Label result (big)
+        # Label result (badge)
         self.result_label = tk.Label(self.result_frame,
                                      text="---",
-                                     font=("Segoe UI", 36, "bold"),
+                                     font=("Segoe UI", 13, "bold"),
                                      bg=COLORS["bg_card"],
-                                     fg=COLORS["text_muted"])
-        self.result_label.pack(pady=(30, 5))
+                                     fg=COLORS["text_muted"],
+                                     padx=15, pady=6)
+        self.result_label.pack(pady=(20, 10))
 
         # Confidence
         self.confidence_label = tk.Label(self.result_frame,
                                           text="",
-                                          font=("Segoe UI", 14),
+                                          font=("Segoe UI", 11, "bold"),
                                           bg=COLORS["bg_card"],
-                                          fg=COLORS["text_secondary"])
-        self.confidence_label.pack(pady=(0, 10))
+                                          fg=COLORS["text_primary"])
+        self.confidence_label.pack(pady=(0, 8))
 
         # Method
         self.method_label = tk.Label(self.result_frame,
                                      text="",
-                                     font=("Segoe UI", 10),
+                                     font=("Segoe UI", 9),
                                      bg=COLORS["bg_card"],
-                                     fg=COLORS["text_muted"])
-        self.method_label.pack(pady=(0, 5))
+                                     fg=COLORS["text_secondary"])
+        self.method_label.pack(pady=(0, 10))
 
         # Details
         self.details_text = scrolledtext.ScrolledText(
@@ -262,6 +298,7 @@ class EmailClassifierApp:
             relief="flat",
             wrap="word",
             height=8,
+            width=40,
             state="disabled",
         )
         self.details_text.pack(fill="both", expand=True, padx=15, pady=(5, 15))
@@ -270,7 +307,7 @@ class EmailClassifierApp:
 
     def _build_imap_tab(self):
         tab = ttk.Frame(self.notebook, style="Dark.TFrame")
-        self.notebook.add(tab, text="  Doc Email (IMAP)  ")
+        self.notebook.add(tab, text="  Quét hòm thư (IMAP)  ")
 
         # Top — Connection form
         form = ttk.Frame(tab, style="Dark.TFrame")
@@ -280,8 +317,8 @@ class EmailClassifierApp:
         row1 = ttk.Frame(form, style="Dark.TFrame")
         row1.pack(fill="x", pady=(0, 8))
 
-        ttk.Label(row1, text="Email:", style="Dark.TLabel",
-                  width=14).pack(side="left")
+        ttk.Label(row1, text="Địa chỉ Email:", style="Dark.TLabel",
+                  width=16).pack(side="left")
 
         self.imap_email = tk.Entry(row1,
                                    font=("Segoe UI", 11),
@@ -307,7 +344,7 @@ class EmailClassifierApp:
         row2.pack(fill="x", pady=(0, 8))
 
         ttk.Label(row2, text="App Password:", style="Dark.TLabel",
-                  width=14).pack(side="left")
+                  width=16).pack(side="left")
 
         self.imap_password = tk.Entry(row2,
                                       font=("Segoe UI", 11),
@@ -321,12 +358,23 @@ class EmailClassifierApp:
                                       highlightbackground=COLORS["border"])
         self.imap_password.pack(side="left", fill="x", expand=True, ipady=6)
 
+        # Algorithm selection
+        row_algo = ttk.Frame(form, style="Dark.TFrame")
+        row_algo.pack(fill="x", pady=(0, 8))
+
+        ttk.Label(row_algo, text="Thuật toán:", style="Dark.TLabel",
+                  width=16).pack(side="left")
+
+        self.imap_model_combo = ttk.Combobox(row_algo, values=["CNN (Deep Learning)", "Logistic Regression (LR)"], state="readonly", font=("Segoe UI", 10))
+        self.imap_model_combo.set("CNN (Deep Learning)")
+        self.imap_model_combo.pack(side="left", fill="x", expand=True)
+
         # Count
         row3 = ttk.Frame(form, style="Dark.TFrame")
         row3.pack(fill="x", pady=(0, 8))
 
-        ttk.Label(row3, text="So email:", style="Dark.TLabel",
-                  width=14).pack(side="left")
+        ttk.Label(row3, text="Số lượng đọc:", style="Dark.TLabel",
+                  width=16).pack(side="left")
 
         self.imap_count = tk.Spinbox(row3,
                                      from_=1, to=50, value=10,
@@ -342,7 +390,7 @@ class EmailClassifierApp:
         self.imap_count.pack(side="left", ipady=6)
 
         # Connect button
-        self.connect_btn = ttk.Button(row3, text="Ket noi & Phan loai",
+        self.connect_btn = ttk.Button(row3, text="Kết nối & Phân loại",
                                       style="Accent.TButton",
                                       command=self._on_connect_imap)
         self.connect_btn.pack(side="right", padx=(10, 0))
@@ -367,11 +415,11 @@ class EmailClassifierApp:
         self.email_tree = ttk.Treeview(list_frame, columns=columns,
                                         show="headings", height=12)
 
-        self.email_tree.heading("sender", text="Nguoi gui")
-        self.email_tree.heading("subject", text="Tieu de")
-        self.email_tree.heading("label", text="Nhan")
-        self.email_tree.heading("confidence", text="Confidence")
-        self.email_tree.heading("method", text="Phuong phap")
+        self.email_tree.heading("sender", text="Người gửi")
+        self.email_tree.heading("subject", text="Tiêu đề")
+        self.email_tree.heading("label", text="Nhãn")
+        self.email_tree.heading("confidence", text="Độ tin cậy")
+        self.email_tree.heading("method", text="Phương pháp")
 
         self.email_tree.column("sender", width=200)
         self.email_tree.column("subject", width=300)
@@ -386,14 +434,19 @@ class EmailClassifierApp:
                         foreground=COLORS["text_primary"],
                         fieldbackground=COLORS["bg_card"],
                         font=("Segoe UI", 10),
-                        rowheight=30)
+                        rowheight=35)
         style.configure("Treeview.Heading",
-                        background=COLORS["bg_input"],
+                        background=COLORS["accent_dim"],
                         foreground=COLORS["accent"],
                         font=("Segoe UI", 10, "bold"))
+        style.map("Treeview.Heading",
+                  background=[("active", COLORS["border"]),
+                              ("!active", COLORS["accent_dim"])],
+                  foreground=[("active", COLORS["accent"]),
+                              ("!active", COLORS["accent"])])
         style.map("Treeview",
                   background=[("selected", COLORS["accent_dim"])],
-                  foreground=[("selected", COLORS["text_primary"])])
+                  foreground=[("selected", COLORS["accent"])])
 
         # Scrollbar
         scrollbar = ttk.Scrollbar(list_frame, orient="vertical",
@@ -407,8 +460,8 @@ class EmailClassifierApp:
         self.email_tree.bind("<<TreeviewSelect>>", self._on_tree_select)
 
         # Tag colors for Spam/Normal
-        self.email_tree.tag_configure("spam", foreground=COLORS["danger"])
-        self.email_tree.tag_configure("normal", foreground=COLORS["success"])
+        self.email_tree.tag_configure("spam", foreground=COLORS["tag_spam_fg"], background=COLORS["tag_spam_bg"])
+        self.email_tree.tag_configure("normal", foreground=COLORS["tag_normal_fg"], background=COLORS["tag_normal_bg"])
 
     # ─── Event Handlers ──────────────────────────────────────────────────
 
@@ -446,7 +499,9 @@ class EmailClassifierApp:
 
         # Run prediction
         try:
-            result = predict_email(text, sender_email=sender, use_rules=True)
+            model_name = self.model_combo.get()
+            model_type = "cnn" if "CNN" in model_name else "lr"
+            result = predict_email(text, sender_email=sender, use_rules=True, model_type=model_type)
             self._display_result(result)
         except Exception as e:
             messagebox.showerror("Loi", f"Loi phan loai: {str(e)}")
@@ -462,32 +517,37 @@ class EmailClassifierApp:
         # Color based on label
         if label == "Spam":
             color = COLORS["danger"]
-            icon = "[SPAM]"
+            bg_color = COLORS["tag_spam_bg"]
+            icon = "SPAM (Thư rác)"
         else:
             color = COLORS["success"]
-            icon = "[OK]"
+            bg_color = COLORS["tag_normal_bg"]
+            icon = "NORMAL (Thư thường)"
 
-        self.result_label.config(text=f"{icon} {label}", fg=color)
-        self.confidence_label.config(text=f"Confidence: {confidence:.1%}")
+        # Cấu hình màu sắc của card kết quả (giữ nền trắng, chỉ đổi màu viền và màu badge)
+        self.result_frame.config(bg=COLORS["bg_card"], highlightbackground=color, highlightthickness=2)
+        self.result_label.config(text=icon, fg=color, bg=bg_color)
+        self.confidence_label.config(text=f"Độ tin cậy: {confidence:.1%}", fg=COLORS["text_primary"], bg=COLORS["bg_card"])
 
         # Method display
         method_map = {
-            "rule_whitelist": "Rule Engine (Whitelist)",
-            "rule_keyword": "Rule Engine (Keywords)",
-            "model_cnn": "CNN Model",
+            "rule_whitelist": "Bộ luật kiểm tra (Danh sách tin cậy)",
+            "rule_keyword": "Bộ luật kiểm tra (Từ khóa nhạy cảm)",
+            "model_cnn": "Mô hình học máy Deep Learning (CNN)",
+            "model_lr": "Mô hình học máy Logistic Regression (LR)",
         }
-        self.method_label.config(text=method_map.get(method, method))
+        self.method_label.config(text=f"Phương pháp: {method_map.get(method, method)}", fg=COLORS["text_secondary"], bg=COLORS["bg_card"])
 
         # Details
         detail_lines = [details]
         if matched:
             detail_lines.append("")
-            detail_lines.append("-- Matched Rules --")
+            detail_lines.append("-- Các luật vi phạm trùng khớp --")
             for m in matched:
                 kws = ', '.join(m['matched_keywords'][:5])
                 detail_lines.append(
-                    f"* {m['group_name']} (weight={m['weight']}, "
-                    f"score={m['group_score']:.1f}): {kws}"
+                    f"* {m['group_name']} (Trọng số={m['weight']}, "
+                    f"Điểm số nhóm={m['group_score']:.1f}): {kws}"
                 )
 
         self.details_text.config(state="normal")
@@ -501,9 +561,13 @@ class EmailClassifierApp:
         self.sender_input.delete(0, "end")
         self.sender_input.insert(0, "vi du: sender@gmail.com")
         self.sender_input.config(fg=COLORS["text_muted"])
-        self.result_label.config(text="---", fg=COLORS["text_muted"])
-        self.confidence_label.config(text="")
-        self.method_label.config(text="")
+        
+        # Reset card
+        self.result_frame.config(bg=COLORS["bg_card"], highlightbackground=COLORS["border"], highlightthickness=1)
+        self.result_label.config(text="---", fg=COLORS["text_muted"], bg=COLORS["bg_card"])
+        self.confidence_label.config(text="", bg=COLORS["bg_card"])
+        self.method_label.config(text="", bg=COLORS["bg_card"])
+        
         self.details_text.config(state="normal")
         self.details_text.delete("1.0", "end")
         self.details_text.config(state="disabled")
@@ -563,6 +627,8 @@ class EmailClassifierApp:
                 return
 
             # Classify each email
+            model_name = self.imap_model_combo.get()
+            model_type = "cnn" if "CNN" in model_name else "lr"
             results = []
             for i, em in enumerate(emails):
                 self.root.after(0, lambda i=i, total=len(emails):
@@ -573,7 +639,8 @@ class EmailClassifierApp:
                 text = f"{em['subject']}\n{em['body']}"
                 pred = predict_email(text,
                                      sender_email=em.get("sender_email", ""),
-                                     use_rules=True)
+                                     use_rules=True,
+                                     model_type=model_type)
                 results.append({**em, **pred})
 
             self.root.after(0, lambda: self._imap_done(
