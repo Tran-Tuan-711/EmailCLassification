@@ -20,10 +20,13 @@ Email Input
                │ (nếu không quyết định được)
                ▼
 ┌─────────────────────────────────────────┐
-│  TẦNG 2: CNN MODEL (SpamAssassin)       │
-│  Embedding → Conv1D → GlobalMaxPool     │
-│  → Dense → Dropout → Sigmoid            │
-└──────────────┬──────────────────────────┘
+│  TẦNG 2: AI MODELS (SpamAssassin)       │
+│  ├─ CNN Model: Embedding -> Conv1D      │
+│  │  -> GlobalMaxPool -> Dense -> Sigmoid│
+│  │                                      │
+│  └─ fastText Model: Embedding           │
+│     -> GlobalAveragePool -> Dense       │
+└─────────────────────────────────────────┘
                │
                ▼
          Kết quả: Spam / Normal
@@ -42,13 +45,14 @@ EmailClassification/
 │   └── spam_clean.csv          # Dataset đã tiền xử lý
 ├── model/
 │   ├── train_cnn.py            # Huấn luyện model CNN
-│   ├── train_lr.py             # Huấn luyện model Logistic Regression
+│   ├── train_fasttext.py       # Huấn luyện model fastText
 │   ├── predict_cnn.py          # Phân loại email (Rule Engine + CNN)
-│   ├── compare_models.py       # So sánh CNN vs Logistic Regression
+│   ├── predict_fasttext.py     # Phân loại email (Rule Engine + fastText)
+│   ├── compare_models.py       # So sánh CNN vs fastText
 │   ├── cnn_model.h5            # Model CNN đã huấn luyện
 │   ├── tokenizer.pkl           # Tokenizer (CNN)
-│   ├── lr_model.pkl            # Model Logistic Regression
-│   └── tfidf_vectorizer.pkl    # TF-IDF Vectorizer (LR)
+│   ├── fasttext_model.h5       # Model fastText đã huấn luyện
+│   └── fasttext_tokenizer.pkl  # Tokenizer (fastText)
 ├── GUI/
 │   └── app.py                  # Giao diện Tkinter (dark theme)
 ├── email_reader/
@@ -90,9 +94,9 @@ python -m utils.save_clean_data
 python -m model.train_cnn
 ```
 
-### 3. Huấn luyện model Logistic Regression
+### 3. Huấn luyện model fastText
 ```bash
-python -m model.train_lr
+python -m model.train_fasttext
 ```
 
 ### 4. So sánh 2 model
@@ -114,12 +118,12 @@ python test.py
 
 ### So sánh Models
 
-| Metric      | CNN          | Logistic Regression |
+| Metric      | CNN          | fastText            |
 |-------------|--------------|---------------------|
-| **Accuracy**| **~99.0%**   | ~98.8%              |
-| ROC-AUC     | —            | ~0.999              |
+| **Accuracy**| **~99.1%**   | **~99.1%**          |
+| ROC-AUC     | ~0.9995      | ~0.9996             |
 | Dataset     | SpamAssassin | SpamAssassin        |
-| Features    | Tokenizer    | TF-IDF              |
+| Features    | Tokenizer    | Tokenizer           |
 
 ### Rule Engine (Tiếng Việt)
 
@@ -143,8 +147,8 @@ python test.py
 ## 🛠 Công nghệ
 
 - **Python 3.11.x**
-- **TensorFlow/Keras** — Mô hình CNN
-- **scikit-learn** — Logistic Regression, TF-IDF, metrics
+- **TensorFlow/Keras** — Mô hình CNN, Mô hình fastText
+- **scikit-learn** — Metrics & train/test split
 - **NLTK** — Tiền xử lý ngôn ngữ tự nhiên
 - **Tkinter** — Giao diện người dùng
 - **imaplib** — Đọc email qua IMAP

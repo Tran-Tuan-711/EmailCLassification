@@ -25,24 +25,6 @@ def _load_model():
 
 
 def predict_email(text, sender_email=None, use_rules=True):
-    """
-    Phân loại email: Normal hoặc Spam.
-    Kết hợp rule-based check (nếu có sender info) + CNN model.
-
-    Args:
-        text: Nội dung email (subject + body)
-        sender_email: Địa chỉ email người gửi (optional)
-        use_rules: Có dùng rule-based check trước không (default: True)
-
-    Returns: dict với keys:
-        - label: "Spam" / "Normal"
-        - confidence: float (0-1)
-        - display: str hiển thị
-        - method: "rule_whitelist" / "rule_keyword" / "model_cnn"
-        - matched_rules: list (nếu dùng rules)
-        - spam_score: float (nếu dùng rules)
-    """
-    # ─── Step 1: Rule-based check ───
     if use_rules:
         engine = get_engine()
 
@@ -69,7 +51,6 @@ def predict_email(text, sender_email=None, use_rules=True):
                 "details": rule_result["details"],
             }
 
-    # ─── Step 2: Fallback sang CNN model ───
     _load_model()
 
     clean = clean_text(text)

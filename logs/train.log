@@ -144,3 +144,54 @@ weighted avg       0.97      0.97      0.97       677
 2026-06-09 18:03:04,710 - INFO - Tokenizer saved to model/tokenizer.pkl
 2026-06-09 18:03:05,627 - INFO - Training charts saved to logs/charts/training_history.png
 2026-06-09 18:03:05,627 - INFO - Training complete!
+2026-06-09 19:55:43,774 - INFO - ============================================================
+2026-06-09 19:55:43,775 - INFO - FASTTEXT MODEL — TRAINING
+2026-06-09 19:55:43,775 - INFO - ============================================================
+2026-06-09 19:55:43,775 - INFO - Loading cleaned dataset...
+2026-06-09 19:55:44,309 - INFO - Dataset size: 3382
+2026-06-09 19:55:44,316 - INFO - Label distribution:
+label
+0    1691
+1    1691
+2026-06-09 19:55:46,353 - INFO - Train size: 2705, Test size: 677
+2026-06-09 19:55:46,640 - INFO - Model: "sequential"
++--------------------------------------------------------------------------+
+| Layer (type)                    | Output Shape           |       Param # |
+|---------------------------------+------------------------+---------------|
+| embedding (Embedding)           | ?                      |   0 (unbuilt) |
+|---------------------------------+------------------------+---------------|
+| global_average_pooling1d        | ?                      |             0 |
+| (GlobalAveragePooling1D)        |                        |               |
+|---------------------------------+------------------------+---------------|
+| dense (Dense)                   | ?                      |   0 (unbuilt) |
+|---------------------------------+------------------------+---------------|
+| dropout (Dropout)               | ?                      |             0 |
+|---------------------------------+------------------------+---------------|
+| dense_1 (Dense)                 | ?                      |   0 (unbuilt) |
++--------------------------------------------------------------------------+
+ Total params: 0 (0.00 B)
+ Trainable params: 0 (0.00 B)
+ Non-trainable params: 0 (0.00 B)
+
+2026-06-09 19:55:46,641 - INFO - Start training...
+2026-06-09 19:57:06,309 - INFO - 
+=== CLASSIFICATION REPORT ===
+2026-06-09 19:57:07,592 - INFO - 
+              precision    recall  f1-score   support
+
+      Normal       1.00      0.99      0.99       339
+        Spam       0.99      1.00      0.99       338
+
+    accuracy                           0.99       677
+   macro avg       0.99      0.99      0.99       677
+weighted avg       0.99      0.99      0.99       677
+
+2026-06-09 19:57:07,593 - INFO - 
+=== CONFUSION MATRIX ===
+2026-06-09 19:57:08,603 - INFO - 
+[[334   5]
+ [  1 337]]
+2026-06-09 19:57:18,101 - INFO - Model saved to model/fasttext_model.h5
+2026-06-09 19:57:20,046 - INFO - Tokenizer saved to model/fasttext_tokenizer.pkl
+2026-06-09 19:57:27,826 - INFO - Training charts saved to logs/charts/fasttext_training.png
+2026-06-09 19:57:27,828 - INFO - Training complete!

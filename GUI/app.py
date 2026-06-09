@@ -18,7 +18,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 from model.predict_cnn import predict_email as predict_email_cnn
-from model.predict_lr import predict_email as predict_email_lr
+from model.predict_fasttext import predict_email as predict_email_fasttext
 from email_reader.imap_reader import IMAPEmailReader, detect_imap_server
 
 
@@ -149,14 +149,14 @@ class EmailClassifierApp:
 
         ttk.Label(selector_frame, text="Mô hình:",
                   font=("Segoe UI", 10, "bold"),
-                  foreground=COLORS["fg_dim"],
+                  foreground=COLORS["text_secondary"],
                   background=COLORS["bg_dark"]).pack(side="left", padx=(0, 8))
         
-        self.model_var = tk.StringVar(value="Logistic Regression")
+        self.model_var = tk.StringVar(value="fastText Model")
         self.model_combobox = ttk.Combobox(
             selector_frame,
             textvariable=self.model_var,
-            values=["Logistic Regression", "CNN Model"],
+            values=["fastText Model", "CNN Model"],
             state="readonly",
             width=20,
             font=("Segoe UI", 10)
@@ -468,7 +468,7 @@ class EmailClassifierApp:
             if model_type == "CNN Model":
                 result = predict_email_cnn(text, sender_email=sender, use_rules=True)
             else:
-                result = predict_email_lr(text, sender_email=sender, use_rules=True)
+                result = predict_email_fasttext(text, sender_email=sender, use_rules=True)
             self._display_result(result)
         except Exception as e:
             messagebox.showerror("Loi", f"Loi phan loai: {str(e)}")
@@ -497,7 +497,7 @@ class EmailClassifierApp:
             "rule_whitelist": "Rule Engine (Whitelist)",
             "rule_keyword": "Rule Engine (Keywords)",
             "model_cnn": "CNN Model",
-            "model_lr": "Logistic Regression Model",
+            "model_fasttext": "fastText Model",
         }
         self.method_label.config(text=method_map.get(method, method))
 
@@ -602,9 +602,9 @@ class EmailClassifierApp:
                                              sender_email=em.get("sender_email", ""),
                                              use_rules=True)
                 else:
-                    pred = predict_email_lr(text,
-                                            sender_email=em.get("sender_email", ""),
-                                            use_rules=True)
+                    pred = predict_email_fasttext(text,
+                                                  sender_email=em.get("sender_email", ""),
+                                                  use_rules=True)
                 results.append({**em, **pred})
 
             self.root.after(0, lambda: self._imap_done(
