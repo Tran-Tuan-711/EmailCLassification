@@ -22,6 +22,7 @@ BANK_PHISHING_KEYWORDS = [
     "tài khoản có dấu hiệu bị xâm nhập", "cảnh báo bảo mật tài khoản",
     "khôi phục tài khoản ngân hàng", "mở khóa tài khoản",
     "cập nhật mật khẩu ngân hàng", "thay đổi pin thẻ", "thẻ tín dụng bị khóa",
+    "tài khoản của bạn bị khóa", "vui lòng xác minh", "xác minh tài khoản",
 
     # Tên ngân hàng phổ biến (dùng trong context giả mạo)
     "vietcombank thông báo khẩn", "techcombank cảnh báo",
@@ -52,6 +53,7 @@ MONEY_PROMO_KEYWORDS = [
     "miễn phí hoàn toàn", "nhận quà miễn phí",
     "click nhận quà", "nhận ngay", "đăng ký nhận",
     "ưu đãi độc quyền", "ưu đãi đặc biệt dành riêng",
+    "ưu đãi cực lớn", "click ngay",
     "hoàn tiền ngay", "hoàn tiền 100%",
     "mua 1 tặng 10", "voucher giảm giá",
 
@@ -59,6 +61,8 @@ MONEY_PROMO_KEYWORDS = [
     "nhận tiền mặt", "chuyển tiền cho bạn",
     "rút tiền ngay", "nhận thưởng tiền mặt",
     "kiếm tiền dễ dàng", "thu nhập hàng ngày",
+    "vay tiền nhanh", "lãi suất thấp",
+    "không cần thế chấp", "cho vay", "vay nhanh",
 ]
 
 # ==============================================================================
@@ -272,6 +276,9 @@ SUSPICIOUS_SENDER_PATTERNS = [
     r".*winner\d*@.*",                  # winner@... / winner123@...
     r".*prize\d*@.*",                   # prize@...
     r".*lucky\d*@.*",                   # lucky@...
+    r"^security@.*",                    # Bắt đầu bằng security@ (trừ các tên miền tin cậy)
+    r"^vaynhanh@.*",                    # Bắt đầu bằng vaynhanh@
+
 ]
 
 # ==============================================================================

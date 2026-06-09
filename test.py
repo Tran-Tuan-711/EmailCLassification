@@ -2,7 +2,17 @@
 Test cases cho hệ thống phân loại email.
 Chạy: python test.py
 """
-from model.predict_cnn import predict_email
+import sys
+
+# Khắc phục lỗi UnicodeEncodeError trên terminal Windows
+if sys.platform.startswith('win'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except AttributeError:
+        pass
+
+from model.predict_cnn import predict_email as predict_email_cnn
+from model.predict_lr import predict_email as predict_email_lr
 
 
 def run_test():
@@ -68,38 +78,47 @@ def run_test():
         },
     ]
 
-    print("=" * 70)
-    print("EMAIL CLASSIFICATION TEST")
-    print("=" * 70)
+    print("=" * 90)
+    print(f"{'SO SÁNH KẾT QUẢ PHÂN LOẠI EMAIL (CNN vs LOGISTIC REGRESSION)':^90}")
+    print("=" * 90)
+    print(f"{'No':<3} | {'Expected':<8} | {'CNN Result (Conf)':<20} | {'LR Result (Conf)':<20} | {'CNN Status':<10} | {'LR Status':<10}")
+    print("-" * 90)
 
-    passed = 0
-    failed = 0
+    cnn_passed = 0
+    lr_passed = 0
 
     for i, case in enumerate(test_cases, 1):
-        result = predict_email(
+        # Predict CNN
+        res_cnn = predict_email_cnn(
+            text=case["text"],
+            sender_email=case["sender"],
+            use_rules=True
+        )
+        # Predict LR
+        res_lr = predict_email_lr(
             text=case["text"],
             sender_email=case["sender"],
             use_rules=True
         )
 
-        status = "PASS" if result["label"] == case["expected"] else "FAIL"
-        if status == "PASS":
-            passed += 1
-        else:
-            failed += 1
+        cnn_status = "PASS" if res_cnn["label"] == case["expected"] else "FAIL"
+        lr_status = "PASS" if res_lr["label"] == case["expected"] else "FAIL"
 
-        print(f"\n--- Test {i} [{status}] ---")
-        print(f"  Text:       {case['text'][:60]}...")
-        print(f"  Sender:     {case['sender']}")
-        print(f"  Expected:   {case['expected']}")
-        print(f"  Got:        {result['label']} ({result['confidence']:.1%})")
-        print(f"  Method:     {result['method']}")
-        if result.get('details'):
-            print(f"  Details:    {result['details'][:80]}")
+        if cnn_status == "PASS":
+            cnn_passed += 1
+        if lr_status == "PASS":
+            lr_passed += 1
 
-    print(f"\n{'=' * 70}")
-    print(f"RESULTS: {passed} passed, {failed} failed, {len(test_cases)} total")
-    print(f"{'=' * 70}")
+        cnn_str = f"{res_cnn['label']} ({res_cnn['confidence']:.1%})"
+        lr_str = f"{res_lr['label']} ({res_lr['confidence']:.1%})"
+
+        print(f"{i:<3} | {case['expected']:<8} | {cnn_str:<20} | {lr_str:<20} | {cnn_status:<10} | {lr_status:<10}")
+
+    print("=" * 90)
+    print("TỔNG HỢP KẾT QUẢ:")
+    print(f"  - CNN Model:                  {cnn_passed}/{len(test_cases)} Passed")
+    print(f"  - Logistic Regression Model:  {lr_passed}/{len(test_cases)} Passed")
+    print("=" * 90)
 
 
 if __name__ == "__main__":

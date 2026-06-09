@@ -17,7 +17,8 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
-from model.predict_cnn import predict_email
+from model.predict_cnn import predict_email as predict_email_cnn
+from model.predict_lr import predict_email as predict_email_lr
 from email_reader.imap_reader import IMAPEmailReader, detect_imap_server
 
 
@@ -59,7 +60,7 @@ class EmailClassifierApp:
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Email Spam Classifier — CNN + Rule Engine")
+        self.root.title("Email Spam Classifier — Multi-Model + Rule Engine")
         self.root.geometry("960x720")
         self.root.minsize(800, 600)
         self.root.configure(bg=COLORS["bg_dark"])
@@ -142,8 +143,25 @@ class EmailClassifierApp:
 
         ttk.Label(header, text="Email Spam Classifier",
                   style="Title.TLabel").pack(side="left")
-        ttk.Label(header, text="CNN Model + Rule Engine VN",
-                  style="Subtitle.TLabel").pack(side="right", pady=(10, 0))
+        # Model selection dropdown in header
+        selector_frame = ttk.Frame(header, style="Dark.TFrame")
+        selector_frame.pack(side="right", pady=(5, 0))
+
+        ttk.Label(selector_frame, text="Mô hình:",
+                  font=("Segoe UI", 10, "bold"),
+                  foreground=COLORS["fg_dim"],
+                  background=COLORS["bg_dark"]).pack(side="left", padx=(0, 8))
+        
+        self.model_var = tk.StringVar(value="Logistic Regression")
+        self.model_combobox = ttk.Combobox(
+            selector_frame,
+            textvariable=self.model_var,
+            values=["Logistic Regression", "CNN Model"],
+            state="readonly",
+            width=20,
+            font=("Segoe UI", 10)
+        )
+        self.model_combobox.pack(side="left")
 
         # Separator
         ttk.Separator(self.root, orient="horizontal",
@@ -446,7 +464,11 @@ class EmailClassifierApp:
 
         # Run prediction
         try:
-            result = predict_email(text, sender_email=sender, use_rules=True)
+            model_type = self.model_var.get()
+            if model_type == "CNN Model":
+                result = predict_email_cnn(text, sender_email=sender, use_rules=True)
+            else:
+                result = predict_email_lr(text, sender_email=sender, use_rules=True)
             self._display_result(result)
         except Exception as e:
             messagebox.showerror("Loi", f"Loi phan loai: {str(e)}")
@@ -475,6 +497,7 @@ class EmailClassifierApp:
             "rule_whitelist": "Rule Engine (Whitelist)",
             "rule_keyword": "Rule Engine (Keywords)",
             "model_cnn": "CNN Model",
+            "model_lr": "Logistic Regression Model",
         }
         self.method_label.config(text=method_map.get(method, method))
 
@@ -534,15 +557,18 @@ class EmailClassifierApp:
         self.imap_status.config(text=f"Dang ket noi {name}...",
                                 fg=COLORS["warning"])
 
+        # Get model type
+        model_type = self.model_var.get()
+
         # Run in background thread
         thread = threading.Thread(
             target=self._fetch_and_classify,
-            args=(server, port, email_addr, password, count),
+            args=(server, port, email_addr, password, count, model_type),
             daemon=True
         )
         thread.start()
 
-    def _fetch_and_classify(self, server, port, email_addr, password, count):
+    def _fetch_and_classify(self, server, port, email_addr, password, count, model_type):
         """Fetch emails from IMAP and classify them (runs in background thread)."""
         try:
             reader = IMAPEmailReader(server, port)
@@ -571,9 +597,14 @@ class EmailClassifierApp:
                         fg=COLORS["warning"]))
 
                 text = f"{em['subject']}\n{em['body']}"
-                pred = predict_email(text,
-                                     sender_email=em.get("sender_email", ""),
-                                     use_rules=True)
+                if model_type == "CNN Model":
+                    pred = predict_email_cnn(text,
+                                             sender_email=em.get("sender_email", ""),
+                                             use_rules=True)
+                else:
+                    pred = predict_email_lr(text,
+                                            sender_email=em.get("sender_email", ""),
+                                            use_rules=True)
                 results.append({**em, **pred})
 
             self.root.after(0, lambda: self._imap_done(

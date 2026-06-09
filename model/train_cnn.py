@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import matplotlib
-matplotlib.use('Agg')  # Non-interactive backend, lưu chart thay vì show
+matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
@@ -59,7 +59,7 @@ def train():
         GlobalMaxPooling1D(),
         Dense(64, activation='relu'),
         Dropout(0.5),
-        Dense(1, activation='sigmoid')  # Binary classification
+        Dense(1, activation='sigmoid')
     ])
 
     model.compile(

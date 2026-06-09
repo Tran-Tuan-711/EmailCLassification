@@ -1,18 +1,3 @@
-"""
-Train Logistic Regression model cho phân loại email Spam/Normal.
-
-Pipeline:
-  1. Load dataset merged (spam_clean_merged.csv)
-  2. TF-IDF Vectorization
-  3. Train Logistic Regression
-  4. Đánh giá trên test set
-  5. Lưu model + vectorizer
-  6. Lưu biểu đồ
-
-Sử dụng:
-  python -m model.train_lr
-"""
-
 import numpy as np
 import pandas as pd
 import pickle
@@ -100,9 +85,9 @@ def train():
 
     model = LogisticRegression(
         max_iter=1000,
-        C=1.0,                  # Regularization strength
+        C=5.0,                  # Regularization strength (C=5.0 for optimal fit)
         solver='lbfgs',         # Tốt cho dataset vừa
-        class_weight='balanced', # Cân bằng class tự động
+        class_weight=None,      # Không dùng balanced để tránh bias dương cho text ngắn
         random_state=42,
         verbose=1,
     )
